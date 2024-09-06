@@ -1,15 +1,13 @@
 name: "CI With Flask Application"
 
 on:
-    workflow_dispatch:
-
-    push:
-        branches:
-            - main
-
+  workflow_dispatch: # Allows manual triggering of the workflow
+  push:
+    branches:
+      - main # Workflow runs when changes are pushed to the 'main' branch
 
 jobs:
-   build:
+  build:
     runs-on: self-hosted
 
     steps:
@@ -19,15 +17,13 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-            python-version: '3'
+          python-version: '3.9' # Using Python 3.9
 
       - name: Install Dependencies
         run: |
-           python -m pip install --upgrade pip
-           pip install flask
+          python -m pip install --upgrade pip
+          pip install Flask==2.2.5 # Install Flask version 2.2.5 or specify in requirements.txt
 
-      - name: Ruinng  PM2
+      - name: Restart PM2 process for Flask app
         run: | 
-           pm2 restart python-app
-
-      
+          pm2 restart python-app || pm2 start app.py --name python-app # Start or restart the Flask app
