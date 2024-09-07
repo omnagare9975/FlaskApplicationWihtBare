@@ -25,3 +25,7 @@ jobs:
           
           # Print out container logs for debugging
           docker logs flask-app
+      - name: Removing The Container 
+        run: |
+           docker stop flask-app
+           docker rm -f flask-app
