@@ -23,9 +23,6 @@ jobs:
           docker exec flask-app python3 -m pip install --upgrade pip
           docker exec flask-app pip install Flask==2.2.5
 
-      - name: Start Flask Application
-        run: |
-          docker exec flask-app python3 app.py # Start the Flask app
 
       - name: Install PM2
         run: |
