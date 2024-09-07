@@ -24,4 +24,4 @@ jobs:
 
       - name: Restart PM2 process for Flask app
         run: |
-          pm2 restart python-app || pm2 start app.py --name python-app # Start or restart the Flask app
+          pm2 restart python-app || pm2 start app.py --interpreter python3 --name python-app # Start or restart the Flask app
