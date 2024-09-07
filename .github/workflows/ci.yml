@@ -14,26 +14,14 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Set up Python Slim Docker image
+      - name: Build and Run Docker Container
         run: |
-          docker run -d --name flask-app -v ${{ github.workspace }}:/app -p 5000:5000 -w /app python:3.9-slim tail -f /dev/null # Run a minimal Python container in detached mode
-
-      - name: Install Dependencies in Docker Container
-        run: |
-          docker exec flask-app python3 -m pip install --upgrade pip
-          docker exec flask-app pip install Flask==2.2.5
-
-
-      - name: Install PM2
-        run: |
-          docker exec flask-app pip install pm2
-          docker exec flask-app pm2 start app.py --interpreter python3 --name python-app # Start the Flask app with PM2
-
-      - name: Check PM2 Status
-        run: |
-          docker exec flask-app pm2 list
-
-      - name: Cleanup
-        run: |
-          docker stop flask-app
-          docker rm flask-app
+          # Stop and remove any existing container with the same name
+          docker stop flask-app || true
+          docker rm flask-app || true
+          
+          # Build and run the Docker container
+          docker run -d --name flask-app -v ${{ github.workspace }}:/app -p 5000:5000 -w /app python:3.9-slim bash -c "pip install Flask==2.2.5 && python app.py"
+          
+          # Print out container logs for debugging
+          docker logs flask-app
